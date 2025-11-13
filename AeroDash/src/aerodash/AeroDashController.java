@@ -1,12 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author luoan
- */
 package aerodash;
 
 import javafx.fxml.FXML;
@@ -30,13 +21,7 @@ public class AeroDashController {
     private Label LiftLabel;
 
     @FXML
-    private Label airSpeedLabel;
-
-    @FXML
     private TextField airSpeedTextField;
-
-    @FXML
-    private Label areaOfAttackLabel;
 
     @FXML
     private TextField areaOfAttackTextField;
@@ -57,21 +42,53 @@ public class AeroDashController {
     private Button resetButton;
 
     @FXML
-    private LineChart<?, ?> spachShipGraph;
-
-    @FXML
     private Button startButton;
 
     @FXML
     private Button viewPathButton;
 
     @FXML
-    private Label wingAreaLabel;
+    private TextField wingAreaTextField;
+
+    // Constants for air properties (example values)
+    private static final double AIR_DENSITY = 1.225; // kg/m³
+    private static final double CL = 1.2; // Lift coefficient (example)
+    private static final double CD = 0.02; // Drag coefficient (example)
 
     @FXML
-    private TextField wingAreaTextField;
-    
-    
+    private void initialize() {
+        startButton.setOnAction(e -> startSimulation());
+        resetButton.setOnAction(e -> resetFields());
+    }
 
+    private void startSimulation() {
+        try {
+            // Read input values
+            double velocity = Double.parseDouble(airSpeedTextField.getText());
+            double wingArea = Double.parseDouble(wingAreaTextField.getText());
+            double angle = Double.parseDouble(areaOfAttackTextField.getText());
+
+            // Simple aerodynamic formulas (basic placeholders)
+            double lift = 0.5 * AIR_DENSITY * velocity * velocity * wingArea * CL;
+            double drag = 0.5 * AIR_DENSITY * velocity * velocity * wingArea * CD;
+
+            // Display the calculated values
+            liftValue.setText(String.format("%.2f N", lift));
+            dragValue.setText(String.format("%.2f N", drag));
+
+        } catch (NumberFormatException ex) {
+            liftValue.setText("Invalid input");
+            dragValue.setText("Invalid input");
+        }
+    }
+
+    private void resetFields() {
+        // Clear all input and output fields
+        airSpeedTextField.clear();
+        wingAreaTextField.clear();
+        areaOfAttackTextField.clear();
+
+        liftValue.setText("");
+        dragValue.setText("");
+    }
 }
-
