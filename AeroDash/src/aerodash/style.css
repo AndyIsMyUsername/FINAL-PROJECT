@@ -1,0 +1,95 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Nov 17, 2025, 8:47:49 p.m.
+    Author     : luoan
+*/
+
+/*
+general styling
+*/
+
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-background-color: linear-gradient(to bottom right, #1a1f2b, #12151d);
+}
+
+
+.label {
+    -fx-text-fill: #e6e6e6;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+#AirSpeedValue,
+#liftValue,
+#dragValue {
+    -fx-text-fill: #4fe3ff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+
+.text-field {
+    -fx-background-color: #2b3245;
+    -fx-background-radius: 6;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-padding: 8;
+    -fx-border-color: #4fe3ff;
+    -fx-border-radius: 6;
+}
+
+
+.button {
+    -fx-background-color: #283043;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 10 15 10 15;
+    -fx-border-color: #4fe3ff;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+}
+
+#resetButton, #startButton, #viewPathButton {
+    -fx-min-width: 120px;
+    -fx-min-height: 45px;
+    -fx-font-size: 14px;
+}
+
+.button:hover {
+    -fx-background-color: #3d4760;
+}
+
+.button:pressed {
+    -fx-background-color: #1c2230;
+}
+
+/* ========== LINE CHARTS ========== */
+
+.chart {
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 10;
+}
+
+.axis-label {
+    -fx-text-fill: #d9d9d9;
+}
+
+.chart-title {
+    -fx-text-fill: #4fe3ff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.axis {
+    -fx-tick-label-fill: #c2c2c2;
+}
