@@ -1,10 +1,15 @@
 package Controller;
 
+import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class AeroDashController {
 
@@ -59,6 +64,7 @@ public class AeroDashController {
     private void initialize() {
         startButton.setOnAction(e -> startSimulation());
         resetButton.setOnAction(e -> resetFields());
+        viewPathButton.setOnAction(e -> viewPath());
     }
 
     private void startSimulation() {
@@ -90,5 +96,48 @@ public class AeroDashController {
 
         liftValue.setText("");
         dragValue.setText("");
+    }
+    
+    //view path of the rocketship
+    private void viewPath() { 
+        
+        try { 
+    
+        String velocityStr = AirSpeedLabel.getText();
+        String wingAreaStr = wingAreaTextField.getText();
+        String angleStr = areaOfAttackTextField.getText();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/PathView.fxml"));
+        Parent root = loader.load();
+        
+        PathViewController pathController = loader.getController();
+        
+        
+        
+        if (!velocityStr.isEmpty() && !wingAreaStr.isEmpty() && !angleStr.isEmpty()) { 
+            try { 
+                double velocity = Double.parseDouble(velocityStr);
+                double wingArea = Double.parseDouble(wingAreaStr);
+                double angle = Double.parseDouble(angleStr);
+                //set the data
+                
+            } catch (NumberFormatException e) { 
+                //if dosent work
+            }
+        }
+        
+        //get the current stage
+        Stage stage = (Stage) viewPathButton.getScene().getWindow();
+        
+        //create a new scene that will show the rocket path
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Rocket Path View");
+        stage.show();
+        
+        //if it cant load path view
+        } catch (Exception e){ 
+            System.out.println("DID NOT WORK");
+        }
     }
 }
