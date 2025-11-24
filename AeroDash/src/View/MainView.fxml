@@ -11,9 +11,11 @@
 <AnchorPane xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controller.MainPageController"
             prefWidth="800" prefHeight="600">
-    
+
     <children>
         <VBox prefWidth="800" prefHeight="600" spacing="30" alignment="CENTER">
+            
+            <!-- Background gradient -->
             <style>
                 -fx-background-color: linear-gradient(to bottom, #0b3d91, #0a2238);
             </style>
@@ -29,7 +31,7 @@
             </Label>
 
             <!-- Subtitle -->
-            <Label text="Explore Lift, Drag & Rocket Trajectories" textFill="lightgray">
+            <Label text="Explore Lift, Drag &amp; Rocket Trajectories" textFill="lightgray">
                 <font>
                     <Font size="20"/>
                 </font>

@@ -16,21 +16,22 @@ import javafx.stage.Stage;
  */
 public class AeroDash extends Application {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-       Application.launch(AeroDash.class, args);
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            // Load the main page
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/MainView.fxml"));
+            Parent root = loader.load();
+
+            primaryStage.setTitle("Aerospace Dashboard");
+            primaryStage.setScene(new Scene(root, 800, 600));
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader  = new FXMLLoader(getClass().getResource("/View/Aerodash.fxml"));
-        
-        Parent root = loader.load();
-        
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    public static void main(String[] args) {
+        launch(args);
     }
 }
