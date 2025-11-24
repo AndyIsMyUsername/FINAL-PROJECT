@@ -13,7 +13,7 @@ general styling
 
 .root {
     -fx-font-family: "Segoe UI", Arial, sans-serif;
-    -fx-background-color: linear-gradient(to bottom right, #1a1f2b, #12151d);
+    -fx-background-color: linear-gradient(to bottom right, #15aebf, #12151d);
 }
 
 
@@ -85,7 +85,7 @@ general styling
 }
 
 .chart-title {
-    -fx-text-fill: #4fe3ff;
+    -fx-text-fill: white;
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
