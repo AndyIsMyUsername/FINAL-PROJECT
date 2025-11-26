@@ -9,6 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
@@ -40,6 +42,9 @@ public class PathViewController {
     
     //physic CONSTANTS
     private static final double GRAVITY = 9.81;
+    
+    //music player
+    private MediaPlayer launchMusic;
 
     @FXML
     private void initialize() {
@@ -173,6 +178,9 @@ public class PathViewController {
         if (fadeTransition != null) {
             fadeTransition.stop();
         }
+        
+        //play music
+        playRocketLaunchMusic();
 
         // Redraw the path
         drawTrajectoryPath();
@@ -260,12 +268,18 @@ public class PathViewController {
         rocket.setVisible(false);
         rocket.setOpacity(1.0);
         drawTrajectoryPath();
+        
+        launchMusic.stop();
     }
 
     // Go back to main dashboard
     @FXML
     void backToDashboard(ActionEvent event) {
         try {
+            
+            //stop the music 
+            launchMusic.stop();
+            
             // Stop all animations
             if (pathTransition != null) {
                 pathTransition.stop();
@@ -284,6 +298,19 @@ public class PathViewController {
             stage.show();
         } catch (Exception e) {
             System.err.println("Failed to return to dashboard: " );
+        }
+    }
+    
+    //play sound when race is finished
+    private void playRocketLaunchMusic() { 
+        try {
+            Media spaceRocketSound = new Media(getClass().getResource("/Sound/rocketSound.mp3").toExternalForm());
+            launchMusic = new MediaPlayer(spaceRocketSound);
+            launchMusic.setVolume(0.5);
+            launchMusic.setCycleCount(1);
+            launchMusic.play();
+        } catch(Exception e) { 
+            System.out.println("COULD NOT PLAY MUSIC ");
         }
     }
 }
