@@ -14,10 +14,10 @@ import javafx.stage.Stage;
 public class AeroDashController {
 
     @FXML private TextField airSpeedTextField;
-    @FXML private TextField areaOfAttackTextField;
+    @FXML private TextField angleOfAttack;
     @FXML private TextField wingAreaTextField;
 
-    @FXML private Label AirSpeedValue;
+    @FXML private Label airSpeedValue;
     @FXML private Label liftValue;
     @FXML private Label dragValue;
 
@@ -25,7 +25,7 @@ public class AeroDashController {
     @FXML private Button resetButton;
     @FXML private Button viewPathButton;
 
-    @FXML private LineChart<String, Number> liftAreaGraph;
+    @FXML private LineChart<String, Number> liftAngleGraph;
     @FXML private LineChart<String, Number> dragVelocityGraph;
     @FXML private LineChart<String, Number> spachShipGraph;
 
@@ -39,112 +39,213 @@ public class AeroDashController {
         resetButton.setOnAction(e -> resetFields());
         viewPathButton.setOnAction(e -> viewPath());
 
-        // Set black text for the big graph
-        setGraphTextBlack(spachShipGraph);
-        // Set black text for small graphs
-        setGraphTextBlack(liftAreaGraph);
-        setGraphTextBlack(dragVelocityGraph);
+        //initialize all the graphs
+        initializeGraphs();
     }
 
+    
+     private void initializeGraphs() {
+        // Clear any existing data
+        dragVelocityGraph.getData().clear();
+        liftAngleGraph.getData().clear();
+        spachShipGraph.getData().clear();
+        
+        // Set animated to false for better performance
+        dragVelocityGraph.setAnimated(false);
+        liftAngleGraph.setAnimated(false);
+        spachShipGraph.setAnimated(false);
+    }
+     
     private void startSimulation() {
         try {
             double velocity = Double.parseDouble(airSpeedTextField.getText());
             double wingArea = Double.parseDouble(wingAreaTextField.getText());
-            double angle = Double.parseDouble(areaOfAttackTextField.getText());
+            double angle = Double.parseDouble(angleOfAttack.getText());
+            
+             // Validate inputs
+            if (velocity <= 0 || wingArea <= 0) {
+                showError("Velocity and wing area must be positive values");
+                return;
+            }
+            
+//            if (angleOfAttack < -10 || angleOfAttack > 30) {
+//                showError("Angle of attack should be between -10° and 30°");
+//                return;
+//            }
 
-            double lift = 0.5 * AIR_DENSITY * velocity * velocity * wingArea * CL;
-            double drag = 0.5 * AIR_DENSITY * velocity * velocity * wingArea * CD;
+            double lift = calculateLift(velocity, wingArea, angle);
+            double drag = calculateDrag(velocity, wingArea);
 
-            AirSpeedValue.setText(String.format("%.2f m/s", velocity));
+            airSpeedValue.setText(String.format("%.2f m/s", velocity));
             liftValue.setText(String.format("%.2f N", lift));
             dragValue.setText(String.format("%.2f N", drag));
 
-            // Bottom small graphs
-            updateGraph(liftAreaGraph, "Lift vs Angle", a -> lift, 0, 20, 2);
-            updateGraph(dragVelocityGraph, "Drag vs Velocity", v -> 0.5 * AIR_DENSITY * v * v * wingArea * CD, 0, velocity, 5);
-
-            // Central big graph
-            spachShipGraph.getData().clear();
-            XYChart.Series<String, Number> liftSeriesBig = createSeries("Lift vs Angle", 0, 20, 2, a -> lift);
-            XYChart.Series<String, Number> dragSeriesBig = createSeries("Drag vs Velocity", 0, velocity, 5, v -> 0.5 * AIR_DENSITY * v * v * wingArea * CD);
-            spachShipGraph.getData().addAll(liftSeriesBig, dragSeriesBig);
+            // Update graphs
+            updateDragVelocityGraph(velocity, wingArea);
+            updateLiftAngleGraph(velocity, wingArea);
+            updateSpaceshipGraph(velocity, lift, drag);
 
         } catch (NumberFormatException ex) {
-            AirSpeedValue.setText("Invalid input");
+            airSpeedValue.setText("Invalid input");
             liftValue.setText("Invalid input");
             dragValue.setText("Invalid input");
         }
     }
+     
+    /*
+    calculate the lift
+    */
+    private double calculateLift(double velocity, double wingArea, double angleOfAttack) {
+        // Calculate lift coefficient based on angle of attack
+        // Using a simplified linear model: CL = CL_max * sin(2 * alpha)
+        double alpha = Math.toRadians(angleOfAttack);
+        double cl = CL * Math.sin(2 * alpha);
+        
+        // Lift formula: L = 0.5 * ρ * V² * S * CL
+        return 0.5 * AIR_DENSITY * velocity * velocity * wingArea * cl;
+    }
+    
+    /*
+    calculate the drag
+    */
+    private double calculateDrag(double velocity, double wingArea) {
+        // Drag formula: D = 0.5 * ρ * V² * S * CD
+        return 0.5 * AIR_DENSITY * velocity * velocity * wingArea * CD;
+    }
 
+    /*
+    show an error
+    */
+    private void showError(String message) {
+        liftValue.setText("Error");
+        dragValue.setText("Error");
+        airSpeedValue.setText(message);
+    }
+    
+    /*
+    update the drag vs velocity graph
+    */
+    private void updateDragVelocityGraph(double currentVelocity, double wingArea) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Drag Force");
+
+        // Generate data points for different velocities (0 to 200 m/s)
+        for (int v = 0; v <= 200; v += 20) {
+            double drag = calculateDrag(v, wingArea);
+            series.getData().add(new XYChart.Data<>(String.valueOf(v), drag));
+        }
+        
+        // Add current velocity point
+        XYChart.Series<String, Number> currentPoint = new XYChart.Series<>();
+        currentPoint.setName("Current");
+        currentPoint.getData().add(new XYChart.Data<>(
+            String.format("%.0f", currentVelocity), 
+            calculateDrag(currentVelocity, wingArea)
+        ));
+
+        dragVelocityGraph.getData().clear();
+        dragVelocityGraph.getData().addAll(series, currentPoint);
+    }
+    
+    /*
+    update lift vs angle
+    */
+    private void updateLiftAngleGraph(double velocity, double wingArea) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Lift Force");
+
+        // Generate data points for different angles of attack (-10° to 30°)
+        for (int angle = -10; angle <= 30; angle += 2) {
+            double lift = calculateLift(velocity, wingArea, angle);
+            series.getData().add(new XYChart.Data<>(String.valueOf(angle), lift));
+        }
+
+        liftAngleGraph.getData().clear();
+        liftAngleGraph.getData().add(series);
+    }
+    
+    /*
+    update the main spaceship graph
+    */
+    private void updateSpaceshipGraph(double velocity, double lift, double drag) {
+        XYChart.Series<String, Number> liftSeries = new XYChart.Series<>();
+        liftSeries.setName("Lift");
+        
+        XYChart.Series<String, Number> dragSeries = new XYChart.Series<>();
+        dragSeries.setName("Drag");
+        
+        XYChart.Series<String, Number> netForceSeries = new XYChart.Series<>();
+        netForceSeries.setName("Net Force");
+
+        // Simple time-based simulation (0 to 10 seconds)
+        for (int t = 0; t <= 10; t++) {
+            liftSeries.getData().add(new XYChart.Data<>(String.valueOf(t), lift));
+            dragSeries.getData().add(new XYChart.Data<>(String.valueOf(t), drag));
+            netForceSeries.getData().add(new XYChart.Data<>(String.valueOf(t), lift - drag));
+        }
+
+        spachShipGraph.getData().clear();
+        spachShipGraph.getData().addAll(liftSeries, dragSeries, netForceSeries);
+    }
+
+    
+
+    /*
+    reset the filed values
+    */
     private void resetFields() {
+       // Clear all input and output fields
         airSpeedTextField.clear();
-        areaOfAttackTextField.clear();
         wingAreaTextField.clear();
-
-        AirSpeedValue.setText("N/A");
+        angleOfAttack.clear();
         liftValue.setText("N/A");
         dragValue.setText("N/A");
-
-        liftAreaGraph.getData().clear();
-        dragVelocityGraph.getData().clear();
-        spachShipGraph.getData().clear();
+        airSpeedValue.setText("N/A");
+        
+        // Clear graphs
+        initializeGraphs();
     }
 
+    //view path panel(change window)
     private void viewPath() {
-        try {
-            double velocity = Double.parseDouble(airSpeedTextField.getText());
-            double wingArea = Double.parseDouble(wingAreaTextField.getText());
-            double angle = Double.parseDouble(areaOfAttackTextField.getText());
-
+       try {
+            // Get current simulation data
+            String velocityStr = airSpeedTextField.getText();
+            String wingAreaStr = wingAreaTextField.getText();
+            String angleStr = angleOfAttack.getText();
+            
+            // Load the path view FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/PathView.fxml"));
             Parent root = loader.load();
-
+            
+            // Get the controller and pass data
             PathViewController pathController = loader.getController();
-            pathController.setFlightData(velocity, wingArea, angle);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
+            
+            // Only pass data if simulation has been run
+            if (!velocityStr.isEmpty() && !wingAreaStr.isEmpty() && !angleStr.isEmpty()) {
+                try {
+                    double velocity = Double.parseDouble(velocityStr);
+                    double wingArea = Double.parseDouble(wingAreaStr);
+                    double angle = Double.parseDouble(angleStr);
+                    pathController.setFlightData(velocity, wingArea, angle);
+                } catch (NumberFormatException e) {
+                    // If parsing fails, just open the view without data
+                }
+            }
+            
+            // Get the current stage
+            Stage stage = (Stage) viewPathButton.getScene().getWindow();
+            
+            // Create new scene and set it
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.setTitle("Rocket Path View");
             stage.show();
-
-        } catch (NumberFormatException ex) {
-            System.out.println("Invalid input for velocity, wing area, or angle.");
+            
         } catch (Exception e) {
-            System.out.println("Failed to load PathView: " + e.getMessage());
+            System.err.println("Error loading Path View: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    // Helper method to update a graph with data
-    private void updateGraph(LineChart<String, Number> chart, String name, java.util.function.DoubleUnaryOperator func,
-                             double start, double end, double step) {
-        chart.getData().clear();
-        XYChart.Series<String, Number> series = createSeries(name, start, end, step, func);
-        chart.getData().add(series);
-    }
-
-    // Helper method to create a series
-    private XYChart.Series<String, Number> createSeries(String name, double start, double end, double step,
-                                                        java.util.function.DoubleUnaryOperator func) {
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName(name);
-        for (double x = start; x <= end; x += step) {
-            series.getData().add(new XYChart.Data<>(String.valueOf(x), func.applyAsDouble(x)));
-        }
-        return series;
-    }
-
-    // Helper method to set all chart text black
-    private void setGraphTextBlack(LineChart<String, Number> chart) {
-        chart.setStyle("-fx-text-fill: black;");
-        chart.lookup(".chart-legend").setStyle("-fx-text-fill: black;");
-        if (chart.getXAxis() != null) {
-            chart.getXAxis().lookup(".axis-label").setStyle("-fx-text-fill: black;");
-            chart.getXAxis().lookupAll(".tick-label").forEach(t -> t.setStyle("-fx-text-fill: black;"));
-        }
-        if (chart.getYAxis() != null) {
-            chart.getYAxis().lookup(".axis-label").setStyle("-fx-text-fill: black;");
-            chart.getYAxis().lookupAll(".tick-label").forEach(t -> t.setStyle("-fx-text-fill: black;"));
+            airSpeedValue.setText("Error loading path view");
         }
     }
 }

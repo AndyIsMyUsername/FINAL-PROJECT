@@ -34,12 +34,12 @@
 
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Label fx:id="areaOfAttackLabel" prefHeight="18.0" prefWidth="245.0" text="Area Of Attack :">
+                        <Label fx:id="areaOfAttackLabel" prefHeight="18.0" prefWidth="245.0" text="Angle Of Attack :">
                             <HBox.margin>
                                 <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="areaOfAttackTextField">
+                        <TextField fx:id="angleOfAttack">
                             <HBox.margin>
                                 <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                             </HBox.margin>
@@ -87,7 +87,7 @@
                                 <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                             </HBox.margin>
                         </Label>
-                        <Label fx:id="AirSpeedValue" text="N/A">
+                        <Label fx:id="airSpeedValue" text="N/A">
                             <HBox.margin>
                                 <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                             </HBox.margin>
@@ -153,7 +153,7 @@
     <bottom>
         <HBox prefHeight="300.0" prefWidth="1250.0" BorderPane.alignment="CENTER">
             <children>
-                <LineChart fx:id="liftAreaGraph" style="-fx-tick-label-fill: black;" title="LIFT VS AREA OF ATTACK">
+                <LineChart fx:id="liftAngleGraph" style="-fx-tick-label-fill: black;" title="LIFT VS AREA OF ATTACK">
                     <xAxis>
                         <CategoryAxis label="Angle of Attack" side="BOTTOM" style="-fx-tick-label-fill: black; -fx-label-fill: black;" tickLabelFill="WHITE" />
                     </xAxis>

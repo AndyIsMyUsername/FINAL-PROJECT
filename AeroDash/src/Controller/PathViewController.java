@@ -4,6 +4,9 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -16,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class PathViewController {
@@ -278,23 +282,18 @@ public class PathViewController {
         try {
             
             //stop the music 
-            launchMusic.stop();
+            if(launchMusic != null) launchMusic.stop();
             
             // Stop all animations
-            if (pathTransition != null) {
-                pathTransition.stop();
-            }
-            if (fadeTransition != null) {
-                fadeTransition.stop();
-            }
+            if (pathTransition != null)  pathTransition.stop();
+            if (fadeTransition != null) fadeTransition.stop();
             
             // Load main dashboard - check your actual file name
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/View/Aerodash.fxml")  // Changed to lowercase 'd'
-            );
-            javafx.scene.Parent root = loader.load();
-            javafx.stage.Stage stage = (javafx.stage.Stage) backButton.getScene().getWindow();
-            stage.setScene(new javafx.scene.Scene(root));
+            FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/View/Aerodash.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
             System.err.println("Failed to return to dashboard: " );
