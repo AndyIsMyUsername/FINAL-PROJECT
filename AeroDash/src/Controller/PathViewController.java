@@ -93,9 +93,13 @@ public class PathViewController {
     
     // Helper method to add rocket to the scene
     private void addRocketToScene() {
+        //check if rocket is in the scene & canvas
         if (rocket.getParent() == null && pathCanvas.getParent() != null) {
+            //check if canvas parant is a Pane
             if (pathCanvas.getParent() instanceof Pane) {
+                //add rocket as a sibling to the canvas
                 ((Pane) pathCanvas.getParent()).getChildren().add(rocket);
+                //if parent is not a pane, check if grandparent is a pane
             } else if (pathCanvas.getParent().getParent() instanceof Pane) {
                 // Sometimes canvas is nested deeper
                 ((Pane) pathCanvas.getParent().getParent()).getChildren().add(rocket);
@@ -168,6 +172,11 @@ public class PathViewController {
         
         // Draw landing point
         gc.fillOval(offsetX + range * scale - 4, offsetY - 4, 8, 8);
+        
+        // Draw distance label at landing point
+        gc.setFill(Color.WHITE);
+        String distanceText = String.format("%.2f m", range);
+        gc.fillText(distanceText, offsetX + range * scale - 40, offsetY - 30);
     }
 
     // Draw grid and ground line
@@ -285,17 +294,16 @@ public class PathViewController {
     // Reset animation
     @FXML
     void resetAnimation(ActionEvent event) {
-        if (pathTransition != null) {
-            pathTransition.stop();
-        }
-        if (fadeTransition != null) {
-            fadeTransition.stop();
-        }
+        
+        //stop transitions
+        if (pathTransition != null)  pathTransition.stop();
+        if (fadeTransition != null)  fadeTransition.stop();
         
         rocket.setVisible(false);
         rocket.setOpacity(1.0);
         drawTrajectoryPath();
         
+        //stop music
         launchMusic.stop();
     }
 
@@ -315,25 +323,31 @@ public class PathViewController {
             FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/View/Aerodash.fxml"));
             Parent root = loader.load();
             
+            //get controller instance, allows us to call methods on it
             AeroDashController dashController = loader.getController();
             
+            //check if velocity are positive
             if(velocity > 0 && wingArea > 0) { 
                 //restore data
                 dashController.restoreData(velocity, wingArea, angle);
             }
             
+            //scene transition
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
+            
         } catch (Exception e) {
             System.err.println("Failed to return to dashboard: " );
         }
     }
     
-    //play sound when race is finished
+    //play sound when rocket is launched
     private void playRocketLaunchMusic() { 
         try {
+            //create media getting the sound
             Media spaceRocketSound = new Media(getClass().getResource("/Sound/rocketSound.mp3").toExternalForm());
+            //set music, volume,and number of times 
             launchMusic = new MediaPlayer(spaceRocketSound);
             launchMusic.setVolume(0.5);
             launchMusic.setCycleCount(1);

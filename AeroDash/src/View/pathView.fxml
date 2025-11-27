@@ -10,7 +10,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PathViewController">
    <center>
-      <Canvas fx:id="pathCanvas" height="600.0" width="900.0" BorderPane.alignment="CENTER">
+      <Canvas fx:id="pathCanvas" height="650.0" width="1000.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
@@ -19,7 +19,7 @@
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="titleLabel" text="ROCKET TRAJECTORY PATH" styleClass="chart-title">
+            <Label fx:id="titleLabel" styleClass="chart-title" text="ROCKET TRAJECTORY PATH">
                <VBox.margin>
                   <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
