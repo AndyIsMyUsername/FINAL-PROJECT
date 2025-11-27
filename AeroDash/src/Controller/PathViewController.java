@@ -107,6 +107,7 @@ public class PathViewController {
         gc.setStroke(Color.rgb(79, 227, 255));
         gc.setLineWidth(2);
 
+        //angle, the range it will cover, and max height
         double rad = Math.toRadians(angle);
         double range = (velocity * velocity * Math.sin(2 * rad)) / GRAVITY;
         double maxHeight = (velocity * velocity * Math.sin(rad) * Math.sin(rad)) / (2 * GRAVITY);

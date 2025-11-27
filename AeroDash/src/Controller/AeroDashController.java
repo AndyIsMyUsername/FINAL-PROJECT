@@ -20,6 +20,7 @@ public class AeroDashController {
     @FXML private Label airSpeedValue;
     @FXML private Label liftValue;
     @FXML private Label dragValue;
+    @FXML private Label errorLabel;
 
     @FXML private Button startButton;
     @FXML private Button resetButton;
@@ -62,16 +63,21 @@ public class AeroDashController {
             double wingArea = Double.parseDouble(wingAreaTextField.getText());
             double angle = Double.parseDouble(angleOfAttack.getText());
             
-             // Validate inputs
+             // Validate inputs(dont allow negative values
             if (velocity <= 0 || wingArea <= 0) {
                 showError("Velocity and wing area must be positive values");
                 return;
+            } else {
+                showError("");
             }
+           
             
-//            if (angleOfAttack < -10 || angleOfAttack > 30) {
-//                showError("Angle of attack should be between -10° and 30°");
-//                return;
-//            }
+            if (angle < -10 || angle > 30) {
+                showError("Angle of attack should be between -10° and 30°");
+                return;
+            } else {
+                showError("");
+            }
 
             double lift = calculateLift(velocity, wingArea, angle);
             double drag = calculateDrag(velocity, wingArea);
@@ -117,9 +123,8 @@ public class AeroDashController {
     show an error
     */
     private void showError(String message) {
-        liftValue.setText("Error");
-        dragValue.setText("Error");
-        airSpeedValue.setText(message);
+        errorLabel.setText(message);
+        errorLabel.setStyle("-fx-text-fill: red;");
     }
     
     /*
@@ -201,6 +206,7 @@ public class AeroDashController {
         liftValue.setText("N/A");
         dragValue.setText("N/A");
         airSpeedValue.setText("N/A");
+        errorLabel.setText("");
         
         // Clear graphs
         initializeGraphs();

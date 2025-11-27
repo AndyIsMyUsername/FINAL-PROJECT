@@ -76,61 +76,6 @@
         </VBox>
     </left>
 
-    <!-- RIGHT PANEL -->
-    <right>
-        <VBox BorderPane.alignment="CENTER">
-            <children>
-                <HBox prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <Label fx:id="AirSpeedLabel" text="AirSpeed : ">
-                            <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                            </HBox.margin>
-                        </Label>
-                        <Label fx:id="airSpeedValue" text="N/A">
-                            <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                            </HBox.margin>
-                        </Label>
-                    </children>
-                </HBox>
-
-                <HBox prefHeight="100.0" prefWidth="0.0">
-                    <children>
-                        <Label fx:id="LiftLabel" text="LIFT: ">
-                            <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                            </HBox.margin>
-                        </Label>
-                        <Label fx:id="liftValue" text="N/A">
-                            <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                            </HBox.margin>
-                        </Label>
-                    </children>
-                </HBox>
-
-                <HBox prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <Label fx:id="DrageLabel" text="DRAG: ">
-                            <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                            </HBox.margin>
-                        </Label>
-                        <Label fx:id="dragValue" text="N/A">
-                            <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                            </HBox.margin>
-                        </Label>
-                    </children>
-                </HBox>
-            </children>
-            <BorderPane.margin>
-                <Insets bottom="150.0" right="25.0" top="200.0" />
-            </BorderPane.margin>
-        </VBox>
-    </right>
-
     <!-- CENTER BIG GRAPH -->
     <center>
         <LineChart fx:id="spachShipGraph" prefHeight="542.0" prefWidth="477.0" style="-fx-tick-label-fill: black;" title="SPACE SHAPE" BorderPane.alignment="CENTER">
@@ -176,6 +121,59 @@
                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                     </HBox.margin>
                 </LineChart>
+              <VBox minWidth="600.0" prefWidth="300.0">
+                  <children>
+                  <Label fx:id="errorLabel" text="" textFill="#ff0404">
+                     <VBox.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                      <HBox prefHeight="100.0" prefWidth="200.0">
+                          <children>
+                              <Label fx:id="AirSpeedLabel" text="AirSpeed : ">
+                                  <HBox.margin>
+                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                  </HBox.margin>
+                              </Label>
+                              <Label fx:id="airSpeedValue" text="N/A">
+                                  <HBox.margin>
+                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                  </HBox.margin>
+                              </Label>
+                          </children>
+                      </HBox>
+      
+                            <HBox prefHeight="100.0" prefWidth="0.0">
+                          <children>
+                              <Label fx:id="LiftLabel" text="LIFT: ">
+                                  <HBox.margin>
+                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                  </HBox.margin>
+                              </Label>
+                              <Label fx:id="liftValue" text="N/A">
+                                  <HBox.margin>
+                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                  </HBox.margin>
+                              </Label>
+                          </children>
+                      </HBox>
+      
+                                  <HBox prefHeight="100.0" prefWidth="200.0">
+                          <children>
+                              <Label fx:id="DrageLabel" text="DRAG: ">
+                                  <HBox.margin>
+                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                  </HBox.margin>
+                              </Label>
+                              <Label fx:id="dragValue" text="N/A">
+                                  <HBox.margin>
+                                      <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                  </HBox.margin>
+                              </Label>
+                          </children>
+                      </HBox>
+                  </children>
+              </VBox>
             </children>
         </HBox>
     </bottom>
