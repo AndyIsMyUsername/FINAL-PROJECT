@@ -193,7 +193,28 @@ public class AeroDashController {
         spachShipGraph.getData().addAll(liftSeries, dragSeries, netForceSeries);
     }
 
-    
+    /*
+    restore data when coming back from PathView
+    */
+    public void restoreData(double velocity, double wingArea, double angle) {
+        // Set the text fields with previous values
+        airSpeedTextField.setText(String.valueOf(velocity));
+        wingAreaTextField.setText(String.valueOf(wingArea));
+        angleOfAttack.setText(String.valueOf(angle));
+        
+        // Recalculate and display results
+        double lift = calculateLift(velocity, wingArea, angle);
+        double drag = calculateDrag(velocity, wingArea);
+        
+        airSpeedValue.setText(String.format("%.2f m/s", velocity));
+        liftValue.setText(String.format("%.2f N", lift));
+        dragValue.setText(String.format("%.2f N", drag));
+        
+        // Update all graphs
+        updateDragVelocityGraph(velocity, wingArea);
+        updateLiftAngleGraph(velocity, wingArea);
+        updateSpaceshipGraph(velocity, lift, drag);
+    }
 
     /*
     reset the filed values

@@ -23,7 +23,7 @@ general styling
     -fx-font-weight: bold;
 }
 
-#AirSpeedValue,
+#airSpeedValue,
 #liftValue,
 #dragValue {
     -fx-text-fill: #4fe3ff;

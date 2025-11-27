@@ -293,6 +293,13 @@ public class PathViewController {
             FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/View/Aerodash.fxml"));
             Parent root = loader.load();
             
+            AeroDashController dashController = loader.getController();
+            
+            if(velocity > 0 && wingArea > 0) { 
+                //restore data
+                dashController.restoreData(velocity, wingArea, angle);
+            }
+            
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
