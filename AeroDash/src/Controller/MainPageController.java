@@ -40,7 +40,7 @@ public class MainPageController {
         }
     }
     
-     //play sound when race is finished
+    //play sound when race is finished
     private void playMainMusic() { 
         try {
             Media mainMenuSound = new Media(getClass().getResource("/Sound/mainMenuSound.mp3").toExternalForm());

@@ -9,6 +9,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class AeroDashController {
@@ -33,12 +35,15 @@ public class AeroDashController {
     private static final double AIR_DENSITY = 1.225; // kg/m³
     private static final double CL = 1.2;           // lift coefficient
     private static final double CD = 0.02;          // drag coefficient
+    
+    private MediaPlayer dashMedia;
 
     @FXML
     private void initialize() {
         startButton.setOnAction(e -> startSimulation());
         resetButton.setOnAction(e -> resetFields());
         viewPathButton.setOnAction(e -> viewPath());
+        playDashMusic();
 
         //initialize all the graphs
         initializeGraphs();
@@ -236,6 +241,12 @@ public class AeroDashController {
     //view path panel(change window)
     private void viewPath() {
        try {
+           
+           //stop music if playing
+           if (dashMedia != null) { 
+               dashMedia.stop();
+           }
+           
             // Get current simulation data
             String velocityStr = airSpeedTextField.getText();
             String wingAreaStr = wingAreaTextField.getText();
@@ -273,6 +284,19 @@ public class AeroDashController {
             System.err.println("Error loading Path View: " + e.getMessage());
             e.printStackTrace();
             airSpeedValue.setText("Error loading path view");
+        }
+    }
+    
+    //play sound when race is finished
+    private void playDashMusic() { 
+        try {
+            Media dashSong = new Media(getClass().getResource("/Sound/dashboardsong.mp3").toExternalForm());
+            dashMedia = new MediaPlayer(dashSong);
+            dashMedia.setVolume(0.1);
+            dashMedia.setCycleCount(1);
+            dashMedia.play();
+        } catch(Exception e) { 
+            System.out.println("COULD NOT PLAY MUSIC ");
         }
     }
 }
