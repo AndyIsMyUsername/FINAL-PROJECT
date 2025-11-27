@@ -11,6 +11,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -40,7 +42,8 @@ public class PathViewController {
     private double wingArea;
     
     // Animation elements
-    private Circle rocket;
+    //private Circle rocket;
+    private ImageView rocket;
     private PathTransition pathTransition;
     private FadeTransition fadeTransition;
     
@@ -52,12 +55,14 @@ public class PathViewController {
 
     @FXML
     private void initialize() {
-        // Create rocket circle (initially hidden)
-        rocket = new Circle(6);
-        rocket.setFill(Color.rgb(255, 165, 0));
-        rocket.setStroke(Color.rgb(255, 100, 0));
-        rocket.setStrokeWidth(2);
+       // Create rocket image (initially hidden)
+        Image rocketImage = new Image(getClass().getResourceAsStream("/Image/space.png"));
+        rocket = new ImageView(rocketImage);
+        rocket.setFitWidth(30); 
+        rocket.setFitHeight(30);
+        //rocket.setPreserveRatio(true);
         rocket.setVisible(false);
+   
         
         //draw the grid
         drawBaseGrid();
@@ -99,45 +104,62 @@ public class PathViewController {
     }
     
     private void drawTrajectoryPath() {
+        //draw the grid first
         drawBaseGrid();
         
+        //if there is no velocity, do not draw
         if (velocity == 0) return;
         
+        //get canvas drawing context
         GraphicsContext gc = pathCanvas.getGraphicsContext2D();
         gc.setStroke(Color.rgb(79, 227, 255));
         gc.setLineWidth(2);
 
-        //angle, the range it will cover, and max height
+        //convert angle to radians for trig functions
         double rad = Math.toRadians(angle);
+        //calculate how far the rocket will go
+        //Formula : x = (v^(2)* sin(2 * angle in rad )) / g
         double range = (velocity * velocity * Math.sin(2 * rad)) / GRAVITY;
+        //calculate the max height
+        //Formula : h = ((v^(2) * (sin^(2)(angle in rad) )))/ (2* g)
         double maxHeight = (velocity * velocity * Math.sin(rad) * Math.sin(rad)) / (2 * GRAVITY);
 
+        //scale the rocket information to a fitable size in canvas
         double scaleX = (pathCanvas.getWidth() - 40) / range;
         double scaleY = (pathCanvas.getHeight() - 40) / (maxHeight + 10);
         double scale = Math.min(scaleX, scaleY);
 
+        //canvas positiionning
         double offsetX = 20;
         double offsetY = pathCanvas.getHeight() - 20;
 
+        //draw the path
         gc.beginPath();
         gc.moveTo(offsetX, offsetY);
 
-        // Draw trajectory curve
+        //simulate each 0.05 second of the flight
         double timeStep = 0.05;
+        //calculate the toatl time until rocket touches back the ground
         double totalTime = 2 * velocity * Math.sin(rad) / GRAVITY;
         
+        //loop through every .05s to caclulate position
         for (double t = 0; t <= totalTime; t += timeStep) {
+            //horizontal position
             double x = velocity * Math.cos(rad) * t;
+            //vertical position
             double y = velocity * Math.sin(rad) * t - 0.5 * GRAVITY * t * t;
 
+            //if rocket touches ground, stop
             if (y < 0) break;
 
+            //convert it to pixel coordinates
             double screenX = offsetX + x * scale;
             double screenY = offsetY - y * scale;
 
+            //draw line until we reach the floor
             gc.lineTo(screenX, screenY);
         }
-
+        //render all line
         gc.stroke();
 
         // Draw launch point
@@ -233,10 +255,10 @@ public class PathViewController {
 
             animationPath.getElements().add(new LineTo(screenX, screenY));
         }
-
-        // Setup rocket position and visibility (adjusted for canvas position)
-        rocket.setCenterX(canvasX + offsetX);
-        rocket.setCenterY(canvasY + offsetY);
+        
+        //starting point
+        rocket.setX(canvasX + offsetX - rocket.getFitWidth() / 2);
+        rocket.setY(canvasY + offsetY - rocket.getFitHeight() / 2);
         rocket.setVisible(true);
         rocket.setOpacity(1.0);
 
