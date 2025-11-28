@@ -9,6 +9,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Slider; // slider import
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -28,11 +29,12 @@ public class AeroDashController {
     @FXML private Button resetButton;
     @FXML private Button viewPathButton;
 
+    @FXML private Slider volumeSlider; // slider to control music volume
+
     @FXML private LineChart<String, Number> liftAngleGraph;
     @FXML private LineChart<String, Number> dragVelocityGraph;
     @FXML private LineChart<String, Number> spachShipGraph;
 
-    // Constants for aerodynamic calculations
     private static final double AIR_DENSITY = 1.225; // kg/m³
     private static final double CL = 1.2;           // lift coefficient
     private static final double CD = 0.02;          // drag coefficient
@@ -41,20 +43,34 @@ public class AeroDashController {
 
     @FXML
     private void initialize() {
-        // Register button actions
         startButton.setOnAction(e -> startSimulation());
         resetButton.setOnAction(e -> resetFields());
         viewPathButton.setOnAction(e -> viewPath());
 
-        // Start dashboard background music
+        // play dashboard music
         playDashMusic();
 
-        //initialize all the graphs
+        // initialize graphs
         initializeGraphs();
+
+        // bind volume slider to media volume
+        setupVolumeSlider();
     }
 
-    // Initialize graph properties and clear them
-    private void initializeGraphs() {
+    /*
+     setup the slider so user can change music volume
+    */
+    private void setupVolumeSlider() {
+        if (volumeSlider != null) {
+            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (dashMedia != null) {
+                    dashMedia.setVolume(newVal.doubleValue());
+                }
+            });
+        }
+    }
+
+     private void initializeGraphs() {
         // Clear any existing data
         dragVelocityGraph.getData().clear();
         liftAngleGraph.getData().clear();
@@ -80,7 +96,6 @@ public class AeroDashController {
                 showError("");
             }
            
-            // Validate angle constraints
             if (angle < -10 || angle > 30) {
                 showError("Angle of attack should be between -10° and 30°");
                 return;
@@ -88,22 +103,19 @@ public class AeroDashController {
                 showError("");
             }
 
-            // Perform core aerodynamic calculations
             double lift = calculateLift(velocity, wingArea, angle);
             double drag = calculateDrag(velocity, wingArea);
 
-            // Update UI labels
             airSpeedValue.setText(String.format("%.2f m/s", velocity));
             liftValue.setText(String.format("%.2f N", lift));
             dragValue.setText(String.format("%.2f N", drag));
 
-            // Update graphs based on simulation results
+            // Update graphs
             updateDragVelocityGraph(velocity, wingArea);
             updateLiftAngleGraph(velocity, wingArea);
             updateSpaceshipGraph(velocity, lift, drag);
 
         } catch (NumberFormatException ex) {
-            // Handle invalid numeric input
             airSpeedValue.setText("Invalid input");
             liftValue.setText("Invalid input");
             dragValue.setText("Invalid input");
@@ -160,7 +172,6 @@ public class AeroDashController {
             calculateDrag(currentVelocity, wingArea)
         ));
 
-        // Replace graph data
         dragVelocityGraph.getData().clear();
         dragVelocityGraph.getData().addAll(series, currentPoint);
     }
@@ -178,7 +189,6 @@ public class AeroDashController {
             series.getData().add(new XYChart.Data<>(String.valueOf(angle), lift));
         }
 
-        // Replace graph data
         liftAngleGraph.getData().clear();
         liftAngleGraph.getData().add(series);
     }
@@ -203,7 +213,6 @@ public class AeroDashController {
             netForceSeries.getData().add(new XYChart.Data<>(String.valueOf(t), lift - drag));
         }
 
-        // Replace graph data
         spachShipGraph.getData().clear();
         spachShipGraph.getData().addAll(liftSeries, dragSeries, netForceSeries);
     }
@@ -212,12 +221,10 @@ public class AeroDashController {
     restore data when coming back from PathView
     */
     public void restoreData(double velocity, double wingArea, double angle) {
-        // Set the text fields with previous values
         airSpeedTextField.setText(String.valueOf(velocity));
         wingAreaTextField.setText(String.valueOf(wingArea));
         angleOfAttack.setText(String.valueOf(angle));
         
-        // Recalculate and display results
         double lift = calculateLift(velocity, wingArea, angle);
         double drag = calculateDrag(velocity, wingArea);
         
@@ -225,7 +232,6 @@ public class AeroDashController {
         liftValue.setText(String.format("%.2f N", lift));
         dragValue.setText(String.format("%.2f N", drag));
         
-        // Update all graphs
         updateDragVelocityGraph(velocity, wingArea);
         updateLiftAngleGraph(velocity, wingArea);
         updateSpaceshipGraph(velocity, lift, drag);
@@ -235,42 +241,35 @@ public class AeroDashController {
     reset the filed values
     */
     private void resetFields() {
-        // Clear all input and output fields
         airSpeedTextField.clear();
         wingAreaTextField.clear();
         angleOfAttack.clear();
-        
-        // Reset label text
         liftValue.setText("N/A");
         dragValue.setText("N/A");
         airSpeedValue.setText("N/A");
         errorLabel.setText("");
         
-        // Clear graphs
         initializeGraphs();
     }
 
     //view path panel(change window)
     private void viewPath() {
-        try {
-            //stop music if playing
-            if (dashMedia != null) { 
-                dashMedia.stop();
-            }
+       try {
            
-            // Get current simulation data (if any)
+           //stop music if playing
+           if (dashMedia != null) { 
+               dashMedia.stop();
+           }
+           
             String velocityStr = airSpeedTextField.getText();
             String wingAreaStr = wingAreaTextField.getText();
             String angleStr = angleOfAttack.getText();
             
-            // Load the path view FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/PathView.fxml"));
             Parent root = loader.load();
             
-            // Get the controller and pass data
             PathViewController pathController = loader.getController();
             
-            // Only pass data if simulation has been run
             if (!velocityStr.isEmpty() && !wingAreaStr.isEmpty() && !angleStr.isEmpty()) {
                 try {
                     double velocity = Double.parseDouble(velocityStr);
@@ -278,14 +277,11 @@ public class AeroDashController {
                     double angle = Double.parseDouble(angleStr);
                     pathController.setFlightData(velocity, wingArea, angle);
                 } catch (NumberFormatException e) {
-                    // If parsing fails, just open the view without data
+                    // ignore
                 }
             }
             
-            // Get the current stage
             Stage stage = (Stage) viewPathButton.getScene().getWindow();
-            
-            // Create new scene and set it
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Rocket Path View");
@@ -304,11 +300,15 @@ public class AeroDashController {
             Media dashSong = new Media(getClass().getResource("/Sound/dashboardsong.mp3").toExternalForm());
             dashMedia = new MediaPlayer(dashSong);
 
-            // Set background music properties
-            dashMedia.setVolume(0.1);
+            // set starting volume + sync with slider
+            double startVolume = 0.1;
+            dashMedia.setVolume(startVolume);
+            if (volumeSlider != null) {
+                volumeSlider.setValue(startVolume);
+            }
+
             dashMedia.setCycleCount(1);
             dashMedia.play();
-
         } catch(Exception e) { 
             System.out.println("COULD NOT PLAY MUSIC ");
         }
