@@ -32,6 +32,7 @@ public class AeroDashController {
     @FXML private LineChart<String, Number> dragVelocityGraph;
     @FXML private LineChart<String, Number> spachShipGraph;
 
+    // Constants for aerodynamic calculations
     private static final double AIR_DENSITY = 1.225; // kg/m³
     private static final double CL = 1.2;           // lift coefficient
     private static final double CD = 0.02;          // drag coefficient
@@ -40,17 +41,20 @@ public class AeroDashController {
 
     @FXML
     private void initialize() {
+        // Register button actions
         startButton.setOnAction(e -> startSimulation());
         resetButton.setOnAction(e -> resetFields());
         viewPathButton.setOnAction(e -> viewPath());
+
+        // Start dashboard background music
         playDashMusic();
 
         //initialize all the graphs
         initializeGraphs();
     }
 
-    
-     private void initializeGraphs() {
+    // Initialize graph properties and clear them
+    private void initializeGraphs() {
         // Clear any existing data
         dragVelocityGraph.getData().clear();
         liftAngleGraph.getData().clear();
@@ -68,7 +72,7 @@ public class AeroDashController {
             double wingArea = Double.parseDouble(wingAreaTextField.getText());
             double angle = Double.parseDouble(angleOfAttack.getText());
             
-             // Validate inputs(dont allow negative values
+            // Validate inputs(dont allow negative values
             if (velocity <= 0 || wingArea <= 0) {
                 showError("Velocity and wing area must be positive values");
                 return;
@@ -76,7 +80,7 @@ public class AeroDashController {
                 showError("");
             }
            
-            
+            // Validate angle constraints
             if (angle < -10 || angle > 30) {
                 showError("Angle of attack should be between -10° and 30°");
                 return;
@@ -84,19 +88,22 @@ public class AeroDashController {
                 showError("");
             }
 
+            // Perform core aerodynamic calculations
             double lift = calculateLift(velocity, wingArea, angle);
             double drag = calculateDrag(velocity, wingArea);
 
+            // Update UI labels
             airSpeedValue.setText(String.format("%.2f m/s", velocity));
             liftValue.setText(String.format("%.2f N", lift));
             dragValue.setText(String.format("%.2f N", drag));
 
-            // Update graphs
+            // Update graphs based on simulation results
             updateDragVelocityGraph(velocity, wingArea);
             updateLiftAngleGraph(velocity, wingArea);
             updateSpaceshipGraph(velocity, lift, drag);
 
         } catch (NumberFormatException ex) {
+            // Handle invalid numeric input
             airSpeedValue.setText("Invalid input");
             liftValue.setText("Invalid input");
             dragValue.setText("Invalid input");
@@ -153,6 +160,7 @@ public class AeroDashController {
             calculateDrag(currentVelocity, wingArea)
         ));
 
+        // Replace graph data
         dragVelocityGraph.getData().clear();
         dragVelocityGraph.getData().addAll(series, currentPoint);
     }
@@ -170,6 +178,7 @@ public class AeroDashController {
             series.getData().add(new XYChart.Data<>(String.valueOf(angle), lift));
         }
 
+        // Replace graph data
         liftAngleGraph.getData().clear();
         liftAngleGraph.getData().add(series);
     }
@@ -194,6 +203,7 @@ public class AeroDashController {
             netForceSeries.getData().add(new XYChart.Data<>(String.valueOf(t), lift - drag));
         }
 
+        // Replace graph data
         spachShipGraph.getData().clear();
         spachShipGraph.getData().addAll(liftSeries, dragSeries, netForceSeries);
     }
@@ -225,10 +235,12 @@ public class AeroDashController {
     reset the filed values
     */
     private void resetFields() {
-       // Clear all input and output fields
+        // Clear all input and output fields
         airSpeedTextField.clear();
         wingAreaTextField.clear();
         angleOfAttack.clear();
+        
+        // Reset label text
         liftValue.setText("N/A");
         dragValue.setText("N/A");
         airSpeedValue.setText("N/A");
@@ -240,14 +252,13 @@ public class AeroDashController {
 
     //view path panel(change window)
     private void viewPath() {
-       try {
+        try {
+            //stop music if playing
+            if (dashMedia != null) { 
+                dashMedia.stop();
+            }
            
-           //stop music if playing
-           if (dashMedia != null) { 
-               dashMedia.stop();
-           }
-           
-            // Get current simulation data
+            // Get current simulation data (if any)
             String velocityStr = airSpeedTextField.getText();
             String wingAreaStr = wingAreaTextField.getText();
             String angleStr = angleOfAttack.getText();
@@ -292,9 +303,12 @@ public class AeroDashController {
         try {
             Media dashSong = new Media(getClass().getResource("/Sound/dashboardsong.mp3").toExternalForm());
             dashMedia = new MediaPlayer(dashSong);
+
+            // Set background music properties
             dashMedia.setVolume(0.1);
             dashMedia.setCycleCount(1);
             dashMedia.play();
+
         } catch(Exception e) { 
             System.out.println("COULD NOT PLAY MUSIC ");
         }
