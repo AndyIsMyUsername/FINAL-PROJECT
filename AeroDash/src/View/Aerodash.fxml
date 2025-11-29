@@ -19,59 +19,51 @@
             fx:controller="Controller.AeroDashController">
 
     <!-- LEFT PANEL -->
-    <left>
-        <VBox prefWidth="250.0" spacing="10" BorderPane.alignment="CENTER_LEFT">
+     <left>
+        <VBox prefWidth="500" spacing="10" BorderPane.alignment="CENTER_LEFT">
             <children>
-
-                <!-- AIR SPEED INPUT -->
-                <HBox>
+                <HBox alignment="CENTER_LEFT">
                     <children>
-                        <Label text="AIRSPEED:">
+                        <Label text="AIRSPEED (m/s):" prefWidth="220" minWidth="220">
                             <HBox.margin>
-                                <Insets top="25" left="25" right="25" bottom="25" />
+                                <Insets top="25" left="25" right="10" bottom="25" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="airSpeedTextField">
+                        <TextField fx:id="airSpeedTextField" prefWidth="200">
                             <HBox.margin>
-                                <Insets top="25" left="25" right="25" bottom="25" />
+                                <Insets top="25" right="25" bottom="25" />
                             </HBox.margin>
                         </TextField>
                     </children>
                 </HBox>
-
-                <!-- ANGLE OF ATTACK -->
-                <HBox>
+                <HBox alignment="CENTER_LEFT">
                     <children>
-                        <Label text="Angle Of Attack :">
+                        <Label text="ANGLE OF ATTACK (degrees):" prefWidth="220" minWidth="220">
                             <HBox.margin>
-                                <Insets top="25" left="25" right="25" bottom="25" />
+                                <Insets top="25" left="25" right="10" bottom="25" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="angleOfAttack">
+                        <TextField fx:id="angleOfAttack" prefWidth="200">
                             <HBox.margin>
-                                <Insets top="25" left="25" right="25" bottom="25" />
+                                <Insets top="25" right="25" bottom="25" />
                             </HBox.margin>
                         </TextField>
                     </children>
                 </HBox>
-
-                <!-- WING AREA -->
-                <HBox>
+                <HBox alignment="CENTER_LEFT">
                     <children>
-                        <Label text="WING AREA:">
+                        <Label text="WING AREA (m^2):" prefWidth="220" minWidth="220">
                             <HBox.margin>
-                                <Insets top="25" left="25" right="25" bottom="25" />
+                                <Insets top="25" left="25" right="10" bottom="25" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="wingAreaTextField">
+                        <TextField fx:id="wingAreaTextField" prefWidth="200">
                             <HBox.margin>
-                                <Insets top="25" left="25" right="25" bottom="25" />
+                                <Insets top="25" right="25" bottom="25" />
                             </HBox.margin>
                         </TextField>
                     </children>
                 </HBox>
-
-                <!-- BUTTONS -->
                 <VBox spacing="15">
                     <children>
                         <Button fx:id="resetButton" text="RESET"/>
@@ -82,22 +74,16 @@
                         <Insets top="10" left="25" right="25" bottom="10"/>
                     </padding>
                 </VBox>
-
-                <!-- VOLUME SLIDER -->
                 <Label text="VOLUME:" style="-fx-text-fill: white; -fx-font-size: 14px;">
                     <VBox.margin>
                         <Insets top="10" left="25" right="25" bottom="5"/>
                     </VBox.margin>
                 </Label>
-
-                <Slider fx:id="volumeSlider"
-                        min="0" max="100" value="20"
-                        prefWidth="200">
+                <Slider fx:id="volumeSlider" min="0" max="100" value="20" prefWidth="200">
                     <VBox.margin>
                         <Insets left="25" right="25" bottom="20"/>
                     </VBox.margin>
                 </Slider>
-
             </children>
         </VBox>
     </left>

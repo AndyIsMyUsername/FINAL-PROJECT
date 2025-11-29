@@ -116,7 +116,8 @@ public class PathViewController {
         
         //get canvas drawing context
         GraphicsContext gc = pathCanvas.getGraphicsContext2D();
-        gc.setStroke(Color.rgb(79, 227, 255));
+        gc.setStroke(Color.rgb(5, 5, 15));
+        gc.fillRect(0, 0, pathCanvas.getWidth(), pathCanvas.getHeight());
         gc.setLineWidth(2);
 
         //convert angle to radians for trig functions
