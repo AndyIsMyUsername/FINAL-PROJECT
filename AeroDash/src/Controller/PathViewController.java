@@ -180,30 +180,30 @@ public class PathViewController {
         gc.fillText(distanceText, offsetX + range * scale - 40, offsetY - 30);
     }
 
-    // Draw grid and ground line
-    private void drawBaseGrid() {
-        GraphicsContext gc = pathCanvas.getGraphicsContext2D();
-        
-        // Clear canvas with dark background
-        gc.setFill(Color.rgb(26, 31, 43));
-        gc.fillRect(0, 0, pathCanvas.getWidth(), pathCanvas.getHeight());
-        
-        // Draw grid
-        gc.setStroke(Color.rgb(60, 70, 90, 0.3));
-        gc.setLineWidth(0.5);
-        
-        for (int i = 0; i <= 10; i++) {
-            double x = i * pathCanvas.getWidth() / 10;
-            gc.strokeLine(x, 0, x, pathCanvas.getHeight());
-            double y = i * pathCanvas.getHeight() / 10;
-            gc.strokeLine(0, y, pathCanvas.getWidth(), y);
-        }
-
-        // Ground line
-        gc.setStroke(Color.rgb(100, 200, 100));
-        gc.setLineWidth(2);
-        gc.strokeLine(0, pathCanvas.getHeight() - 20, pathCanvas.getWidth(), pathCanvas.getHeight() - 20);
+  // Draw grid and ground line
+private void drawBaseGrid() {
+    GraphicsContext gc = pathCanvas.getGraphicsContext2D();
+    
+    // Clear canvas with dark background
+    gc.setFill(Color.rgb(10, 15, 40)); // Dark blue for space
+    gc.fillRect(0, 0, pathCanvas.getWidth(), pathCanvas.getHeight());
+    
+    // Draw grid
+    gc.setStroke(Color.rgb(60, 70, 90, 0.3));
+    gc.setLineWidth(0.5);
+    
+    for (int i = 0; i <= 10; i++) {
+        double x = i * pathCanvas.getWidth() / 10;
+        gc.strokeLine(x, 0, x, pathCanvas.getHeight());
+        double y = i * pathCanvas.getHeight() / 10;
+        gc.strokeLine(0, y, pathCanvas.getWidth(), y);
     }
+
+    // Ground line
+    gc.setStroke(Color.rgb(100, 200, 100));
+    gc.setLineWidth(2);
+    gc.strokeLine(0, pathCanvas.getHeight() - 20, pathCanvas.getWidth(), pathCanvas.getHeight() - 20);
+}
 
     // Animate trajectory - MUST have @FXML annotation
     @FXML
