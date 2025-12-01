@@ -73,17 +73,28 @@ Drag = 0.5 × ρ × V² × S × Cd
 
 ## **Project Structure Overview**
 
-### **MainApp.java**  
-Entry point that initializes the JavaFX stage and scene.
+### **Controller file**  
+Contains:
+-MainPageController.java : Home Page with start button
+-AeroDashContoller.java : takes in use inputed values, changes loudness of music
+-PathViewController.java : showcasing of the rocket's trajectory
 
-### **DashboardController.java**  
-Connects user inputs (sliders, buttons, UI elements) to the application logic.
 
-### **AeroDashController.java**  
-Controls animations, plane visualization, and dashboard interactions.
+### **Image File**  
+Contains images used for the project
 
-### **AerodynamicsModel.java**  
-Performs physics calculations for lift and drag.
+### **Main File**  
+Contains the Main Class
+
+### **Sound File**  
+Contains all music and sound used for the project
+
+### **View File**  
+Contains:
+-MainView.fxml : Graphics for the Main Page
+-Aerodash.fxml : Graphics for the Aero Dash page (user input page)
+-pathView.fxml : Graphics for the Path View page
+-style.css : styling of the pages
 
 ---
 
@@ -98,9 +109,9 @@ Performs physics calculations for lift and drag.
 ## **How to Run the Project**
 
 ### **Requirements**
-- Java **22+**  
+- Java **22**  
 - JavaFX SDK  
-- IntelliJ IDEA (or any JavaFX-capable IDE)  
+- Apache NetBeans (on any supporting IDE)  
 - Git (optional)  
 
 ### **Steps**
@@ -111,23 +122,7 @@ Performs physics calculations for lift and drag.
 3. Configure JavaFX (Libraries, VM Option, Scene Builder)
 4. Run MainApp.java
 
-src/
- ├── main/
- │   ├── java/
- │   │   ├── MainApp.java
- │   │   ├── controller/
- │   │   │   ├── DashboardController.java
- │   │   │   ├── AeroDashController.java
- │   │   │   └── PathViewController.java
- │   │   ├── model/
- │   │   │   └── AerodynamicsModel.java
- │   │   └── util/
- │   └── resources/
- │       ├── FXML layouts
- │       ├── audio files
- │       └── images
- └── test/
-     └── junit tests
+
 ## **Teamwork Summary**
 
 ### **Andy Luo**
