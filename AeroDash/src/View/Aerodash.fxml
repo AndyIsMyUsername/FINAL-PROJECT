@@ -8,6 +8,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -19,51 +21,43 @@
             fx:controller="Controller.AeroDashController">
 
     <!-- LEFT PANEL -->
-     <left>
+    <left>
         <VBox prefWidth="500" spacing="10" BorderPane.alignment="CENTER_LEFT">
             <children>
+
                 <HBox alignment="CENTER_LEFT">
                     <children>
                         <Label text="AIRSPEED (m/s):" prefWidth="220" minWidth="220">
-                            <HBox.margin>
-                                <Insets top="25" left="25" right="10" bottom="25" />
-                            </HBox.margin>
+                            <HBox.margin><Insets top="25" left="25" right="10" bottom="25"/></HBox.margin>
                         </Label>
                         <TextField fx:id="airSpeedTextField" prefWidth="200">
-                            <HBox.margin>
-                                <Insets top="25" right="25" bottom="25" />
-                            </HBox.margin>
+                            <HBox.margin><Insets top="25" right="25" bottom="25"/></HBox.margin>
                         </TextField>
                     </children>
                 </HBox>
+
                 <HBox alignment="CENTER_LEFT">
                     <children>
                         <Label text="ANGLE OF ATTACK (degrees):" prefWidth="220" minWidth="220">
-                            <HBox.margin>
-                                <Insets top="25" left="25" right="10" bottom="25" />
-                            </HBox.margin>
+                            <HBox.margin><Insets top="25" left="25" right="10" bottom="25"/></HBox.margin>
                         </Label>
                         <TextField fx:id="angleOfAttack" prefWidth="200">
-                            <HBox.margin>
-                                <Insets top="25" right="25" bottom="25" />
-                            </HBox.margin>
+                            <HBox.margin><Insets top="25" right="25" bottom="25"/></HBox.margin>
                         </TextField>
                     </children>
                 </HBox>
+
                 <HBox alignment="CENTER_LEFT">
                     <children>
                         <Label text="WING AREA (m^2):" prefWidth="220" minWidth="220">
-                            <HBox.margin>
-                                <Insets top="25" left="25" right="10" bottom="25" />
-                            </HBox.margin>
+                            <HBox.margin><Insets top="25" left="25" right="10" bottom="25"/></HBox.margin>
                         </Label>
                         <TextField fx:id="wingAreaTextField" prefWidth="200">
-                            <HBox.margin>
-                                <Insets top="25" right="25" bottom="25" />
-                            </HBox.margin>
+                            <HBox.margin><Insets top="25" right="25" bottom="25"/></HBox.margin>
                         </TextField>
                     </children>
                 </HBox>
+
                 <VBox spacing="15">
                     <children>
                         <Button fx:id="resetButton" text="RESET"/>
@@ -74,76 +68,54 @@
                         <Insets top="10" left="25" right="25" bottom="10"/>
                     </padding>
                 </VBox>
+
                 <Label text="VOLUME:" style="-fx-text-fill: white; -fx-font-size: 14px;">
-                    <VBox.margin>
-                        <Insets top="10" left="25" right="25" bottom="5"/>
-                    </VBox.margin>
+                    <VBox.margin><Insets top="10" left="25" right="25" bottom="5"/></VBox.margin>
                 </Label>
+
                 <Slider fx:id="volumeSlider" min="0" max="100" value="20" prefWidth="200">
-                    <VBox.margin>
-                        <Insets left="25" right="25" bottom="20"/>
-                    </VBox.margin>
+                    <VBox.margin><Insets left="25" right="25" bottom="20"/></VBox.margin>
                 </Slider>
+
             </children>
         </VBox>
     </left>
 
-    <!-- CENTER MAIN CHART -->
+    <!-- CENTER: FLOATING SPACE IMAGE -->
     <center>
-        <LineChart fx:id="spachShipGraph"
-                   title="SPACE SHAPE"
-                   prefHeight="542.0"
-                   prefWidth="477.0">
-
-            <xAxis>
-                <CategoryAxis label="Input (Angle or Velocity)" side="BOTTOM"/>
-            </xAxis>
-
-            <yAxis>
-                <NumberAxis label="Force (N)" side="LEFT"/>
-            </yAxis>
-
+        <ImageView fx:id="spaceImage"
+                   fitWidth="300"
+                   preserveRatio="true"
+                   pickOnBounds="true">
+            <image>
+                <Image url="/Image/1.png"/>
+            </image>
             <BorderPane.margin>
                 <Insets top="25" left="25" right="25" bottom="25"/>
             </BorderPane.margin>
-
-        </LineChart>
+        </ImageView>
     </center>
 
-    <!-- BOTTOM TWO CHARTS + NUMBERS -->
+    <!-- BOTTOM: CHARTS + VALUES -->
     <bottom>
         <HBox prefHeight="300.0" prefWidth="1250.0">
-
             <children>
 
-                <!-- LIFT VS ANGLE -->
                 <LineChart fx:id="liftAngleGraph" title="LIFT VS AREA OF ATTACK">
-                    <xAxis>
-                        <CategoryAxis label="Angle of Attack"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Lift (N)"/>
-                    </yAxis>
+                    <xAxis><CategoryAxis label="Angle of Attack"/></xAxis>
+                    <yAxis><NumberAxis label="Lift (N)"/></yAxis>
                 </LineChart>
 
-                <!-- DRAG VS VELOCITY -->
                 <LineChart fx:id="dragVelocityGraph" title="DRAG VS VELOCITY">
-                    <xAxis>
-                        <CategoryAxis label="Velocity (m/s)"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Drag (N)"/>
-                    </yAxis>
+                    <xAxis><CategoryAxis label="Velocity (m/s)"/></xAxis>
+                    <yAxis><NumberAxis label="Drag (N)"/></yAxis>
                 </LineChart>
 
-                <!-- NUMERIC VALUES -->
                 <VBox prefWidth="300">
                     <children>
 
                         <Label fx:id="errorLabel" text="" textFill="#ff0404">
-                            <VBox.margin>
-                                <Insets top="25" left="25" right="25" bottom="25"/>
-                            </VBox.margin>
+                            <VBox.margin><Insets top="25" left="25" right="25" bottom="25"/></VBox.margin>
                         </Label>
 
                         <HBox>
@@ -183,7 +155,6 @@
                 </VBox>
 
             </children>
-
         </HBox>
     </bottom>
 
