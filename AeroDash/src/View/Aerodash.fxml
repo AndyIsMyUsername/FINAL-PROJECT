@@ -98,64 +98,48 @@
 
     <!-- BOTTOM: CHARTS + VALUES -->
     <bottom>
-        <HBox prefHeight="300.0" prefWidth="1250.0">
-            <children>
+    <HBox prefHeight="220.0" prefWidth="1249.0" spacing="10">
+        <children>
 
-                <LineChart fx:id="liftAngleGraph" title="LIFT VS AREA OF ATTACK">
-                    <xAxis><CategoryAxis label="Angle of Attack"/></xAxis>
-                    <yAxis><NumberAxis label="Lift (N)"/></yAxis>
-                </LineChart>
+            <LineChart fx:id="liftAngleGraph" title="LIFT VS AREA OF ATTACK" prefHeight="200" HBox.hgrow="ALWAYS">
+                <xAxis><CategoryAxis label="Angle"/></xAxis>
+                <yAxis><NumberAxis label="Lift (N)"/></yAxis>
+            </LineChart>
 
-                <LineChart fx:id="dragVelocityGraph" title="DRAG VS VELOCITY">
-                    <xAxis><CategoryAxis label="Velocity (m/s)"/></xAxis>
-                    <yAxis><NumberAxis label="Drag (N)"/></yAxis>
-                </LineChart>
+            <LineChart fx:id="dragVelocityGraph" title="DRAG VS VELOCITY" prefHeight="200" HBox.hgrow="ALWAYS">
+                <xAxis><CategoryAxis label="Velocity"/></xAxis>
+                <yAxis><NumberAxis label="Drag (N)"/></yAxis>
+            </LineChart>
 
-                <VBox prefWidth="300">
-                    <children>
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <children>
 
-                        <Label fx:id="errorLabel" text="" textFill="#ff0404">
-                            <VBox.margin><Insets top="25" left="25" right="25" bottom="25"/></VBox.margin>
-                        </Label>
+                    <Label fx:id="errorLabel" text="" textFill="#ff0404"/>
 
-                        <HBox>
-                            <children>
-                                <Label text="AirSpeed :">
-                                    <HBox.margin><Insets top="25" left="25" right="25" bottom="25"/></HBox.margin>
-                                </Label>
-                                <Label fx:id="airSpeedValue" text="N/A">
-                                    <HBox.margin><Insets top="25" left="25" right="25" bottom="25"/></HBox.margin>
-                                </Label>
-                            </children>
-                        </HBox>
+                    <HBox spacing="5">
+                        <Label text="AirSpeed :"/>
+                        <Label fx:id="airSpeedValue" text="N/A"/>
+                    </HBox>
 
-                        <HBox>
-                            <children>
-                                <Label text="LIFT:">
-                                    <HBox.margin><Insets top="25" left="25" right="25" bottom="25"/></HBox.margin>
-                                </Label>
-                                <Label fx:id="liftValue" text="N/A">
-                                    <HBox.margin><Insets top="25" left="25" right="25" bottom="25"/></HBox.margin>
-                                </Label>
-                            </children>
-                        </HBox>
+                    <HBox spacing="5">
+                        <Label text="LIFT:"/>
+                        <Label fx:id="liftValue" text="N/A"/>
+                    </HBox>
 
-                        <HBox>
-                            <children>
-                                <Label text="DRAG:">
-                                    <HBox.margin><Insets top="25" left="25" right="25" bottom="25"/></HBox.margin>
-                                </Label>
-                                <Label fx:id="dragValue" text="N/A">
-                                    <HBox.margin><Insets top="25" left="25" right="25" bottom="25"/></HBox.margin>
-                                </Label>
-                            </children>
-                        </HBox>
+                    <HBox spacing="5">
+                        <Label text="DRAG:"/>
+                        <Label fx:id="dragValue" text="N/A"/>
+                    </HBox>
 
-                    </children>
-                </VBox>
+                </children>
 
-            </children>
-        </HBox>
-    </bottom>
+                <padding>
+                    <Insets top="10" left="10" right="10" bottom="10"/>
+                </padding>
+            </VBox>
+
+        </children>
+    </HBox>
+</bottom>
 
 </BorderPane>

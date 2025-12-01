@@ -26,12 +26,16 @@ import javafx.util.Duration;
 
 public class PathViewController {
 
+    // Labels to display flight data
     @FXML private Label velocityLabel;
     @FXML private Label angleLabel;
     @FXML private Label maxHeightLabel;
     @FXML private Label rangeLabel;
 
+    // Canvas to draw the trajectory path and grid
     @FXML private Canvas pathCanvas;
+    
+    // Buttons to control animation and navigation
     @FXML private Button animateButton;
     @FXML private Button resetAnimationButton;
     @FXML private Button backButton;
@@ -53,6 +57,10 @@ public class PathViewController {
     //music player
     private MediaPlayer launchMusic;
 
+    /**
+     * Initialize method called automatically after FXML is loaded.
+     * Sets up the rocket image and draws the base grid.
+     */
     @FXML
     private void initialize() {
        // Create rocket image (initially hidden)
@@ -68,7 +76,10 @@ public class PathViewController {
         drawBaseGrid();
     }
     
-    // Method called from AeroDashController
+    /**
+     * Called from AeroDashController to provide flight data.
+     * Also calculates and displays derived physics values (max height, range).
+     */
     public void setFlightData(double velocity, double wingArea, double angle) {
         this.velocity = velocity;
         this.wingArea = wingArea;
@@ -88,10 +99,14 @@ public class PathViewController {
         // Add rocket to parent if not already added
         addRocketToScene();
         
+        //draw the trajectory path
         drawTrajectoryPath();
     }
     
-    // Helper method to add rocket to the scene
+    /**
+     * Ensures the rocket ImageView is added to the scene.
+     * Adds it as a sibling to the canvas for animation purposes.
+     */
     private void addRocketToScene() {
         //check if rocket is in the scene & canvas
         if (rocket.getParent() == null && pathCanvas.getParent() != null) {
@@ -107,6 +122,10 @@ public class PathViewController {
         }
     }
     
+     /**
+     * Draws the projectile trajectory of the rocket on the Canvas.
+     * Uses simple physics formulas (no drag) and scales the path to fit the canvas.
+     */
     private void drawTrajectoryPath() {
         //draw the grid first
         drawBaseGrid();
@@ -180,32 +199,35 @@ public class PathViewController {
         gc.fillText(distanceText, offsetX + range * scale - 40, offsetY - 30);
     }
 
-  // Draw grid and ground line
-private void drawBaseGrid() {
-    GraphicsContext gc = pathCanvas.getGraphicsContext2D();
-    
-    // Clear canvas with dark background
-    gc.setFill(Color.rgb(10, 15, 40)); // Dark blue for space
-    gc.fillRect(0, 0, pathCanvas.getWidth(), pathCanvas.getHeight());
-    
-    // Draw grid
-    gc.setStroke(Color.rgb(60, 70, 90, 0.3));
-    gc.setLineWidth(0.5);
-    
-    for (int i = 0; i <= 10; i++) {
-        double x = i * pathCanvas.getWidth() / 10;
-        gc.strokeLine(x, 0, x, pathCanvas.getHeight());
-        double y = i * pathCanvas.getHeight() / 10;
-        gc.strokeLine(0, y, pathCanvas.getWidth(), y);
-    }
+    // Draw grid and ground line
+    private void drawBaseGrid() {
+        GraphicsContext gc = pathCanvas.getGraphicsContext2D();
 
-    // Ground line
-    gc.setStroke(Color.rgb(100, 200, 100));
-    gc.setLineWidth(2);
-    gc.strokeLine(0, pathCanvas.getHeight() - 20, pathCanvas.getWidth(), pathCanvas.getHeight() - 20);
+        // Clear canvas with dark background
+        gc.setFill(Color.rgb(10, 15, 40)); // Dark blue for space
+        gc.fillRect(0, 0, pathCanvas.getWidth(), pathCanvas.getHeight());
+
+        // Draw grid
+        gc.setStroke(Color.rgb(60, 70, 90, 0.3));
+        gc.setLineWidth(0.5);
+
+        for (int i = 0; i <= 10; i++) {
+            double x = i * pathCanvas.getWidth() / 10;
+            gc.strokeLine(x, 0, x, pathCanvas.getHeight());
+            double y = i * pathCanvas.getHeight() / 10;
+            gc.strokeLine(0, y, pathCanvas.getWidth(), y);
+        }
+
+        // Ground line
+        gc.setStroke(Color.rgb(100, 200, 100));
+        gc.setLineWidth(2);
+        gc.strokeLine(0, pathCanvas.getHeight() - 20, pathCanvas.getWidth(), pathCanvas.getHeight() - 20);
 }
 
-    // Animate trajectory - MUST have @FXML annotation
+    /**
+     * Animates the rocket along the trajectory using PathTransition.
+     * Plays launch music and adds a fade-out effect at the end.
+     */
     @FXML
     void animateTrajectory(ActionEvent event) {
         // Stop any existing animations
@@ -292,7 +314,9 @@ private void drawBaseGrid() {
         pathTransition.play();
     }
 
-    // Reset animation
+    /*
+    reset the animation
+    */
     @FXML
     void resetAnimation(ActionEvent event) {
         
@@ -308,7 +332,9 @@ private void drawBaseGrid() {
         launchMusic.stop();
     }
 
-    // Go back to main dashboard
+    /*
+    go back to main dashboard
+    */
     @FXML
     void backToDashboard(ActionEvent event) {
         try {
