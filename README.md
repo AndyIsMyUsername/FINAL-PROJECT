@@ -71,30 +71,42 @@ Drag = 0.5 × ρ × V² × S × Cd
 
 ---
 
-## **Project Structure Overview**
+# **Project Structure Overview**
 
-### **Controller file**  
+The project follows a clean modular structure with separate files for controllers, views, images, sounds, and core logic.
+
+---
+
+## **Controller Files**
 Contains:
--MainPageController.java : Home Page with start button
--AeroDashContoller.java : takes in use inputed values, changes loudness of music
--PathViewController.java : showcasing of the rocket's trajectory
+- **MainPageController.java** – Controls the home page with the Start button  
+- **AeroDashController.java** – Handles user input (velocity, AoA, wing area, etc.) and music volume  
+- **PathViewController.java** – Displays the rocket/plane trajectory visualization  
 
+---
 
-### **Image File**  
-Contains images used for the project
+## **Image File**
+Contains all images used throughout the project (plane graphics, UI icons, etc.)
 
-### **Main File**  
-Contains the Main Class
+---
 
-### **Sound File**  
-Contains all music and sound used for the project
+## **Main File**
+- **MainApp.java** – Main entry point of the program  
 
-### **View File**  
-Contains:
--MainView.fxml : Graphics for the Main Page
--Aerodash.fxml : Graphics for the Aero Dash page (user input page)
--pathView.fxml : Graphics for the Path View page
--style.css : styling of the pages
+---
+
+## **Sound File**
+Contains all background music and sound effects used in the application.
+
+---
+
+## **View File**
+Contains the full UI layout:
+
+- **MainView.fxml** – Home page UI  
+- **Aerodash.fxml** – Main dashboard UI (user input page)  
+- **PathView.fxml** – Trajectory path UI  
+- **style.css** – Visual styling for all pages  
 
 ---
 
