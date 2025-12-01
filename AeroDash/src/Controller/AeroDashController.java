@@ -47,31 +47,31 @@ public class AeroDashController {
 
     @FXML
     private void initialize() {
+        // setup button actions
         startButton.setOnAction(e -> startSimulation());
         resetButton.setOnAction(e -> resetFields());
         viewPathButton.setOnAction(e -> viewPath());
 
-        playDashMusic();
-        initializeGraphs();
-        setupVolumeSlider();
+        playDashMusic();       // start dashboard music
+        initializeGraphs();    // clear and prepare graphs
+        setupVolumeSlider();   // link volume slider
 
-     
-        startFloatingAnimation();
+        startFloatingAnimation(); // start floating + fly effect
     }
 
-
+    // Floating + fly-away animation
     private void startFloatingAnimation() {
         if (spaceImage != null) {
-            // Fly-away and come-back animation
+            // move right and come back forever
             TranslateTransition flyAnim = new TranslateTransition(Duration.seconds(10), spaceImage);
-            flyAnim.setByX(500); // move right
-            flyAnim.setAutoReverse(true); // come back
+            flyAnim.setByX(500);
+            flyAnim.setAutoReverse(true);
             flyAnim.setCycleCount(TranslateTransition.INDEFINITE);
             flyAnim.play();
 
-
+            // small up/down floating
             TranslateTransition floatAnim = new TranslateTransition(Duration.seconds(3), spaceImage);
-            floatAnim.setByY(-25); // float up
+            floatAnim.setByY(-25);
             floatAnim.setAutoReverse(true);
             floatAnim.setCycleCount(TranslateTransition.INDEFINITE);
             floatAnim.play();
@@ -80,7 +80,7 @@ public class AeroDashController {
         }
     }
 
- 
+    // Volume slider control
     private void setupVolumeSlider() {
         if (volumeSlider != null) {
             volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -91,15 +91,15 @@ public class AeroDashController {
         }
     }
 
-
+    // Prepare graphs
     private void initializeGraphs() {
         dragVelocityGraph.getData().clear();
         liftAngleGraph.getData().clear();
-
         dragVelocityGraph.setAnimated(false);
         liftAngleGraph.setAnimated(false);
     }
 
+    // Update drag vs velocity
     private void updateDragVelocityGraph(double currentVelocity, double wingArea) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Drag Force");
@@ -109,17 +109,17 @@ public class AeroDashController {
             series.getData().add(new XYChart.Data<>(String.valueOf(v), drag));
         }
 
+        // mark current point
         XYChart.Series<String, Number> point = new XYChart.Series<>();
         point.setName("Current");
-        point.getData().add(new XYChart.Data<>(
-                String.valueOf((int) currentVelocity),
-                calculateDrag(currentVelocity, wingArea)
-        ));
+        point.getData().add(new XYChart.Data<>(String.valueOf((int) currentVelocity),
+                                               calculateDrag(currentVelocity, wingArea)));
 
         dragVelocityGraph.getData().clear();
         dragVelocityGraph.getData().addAll(series, point);
     }
 
+    // Update lift vs angle
     private void updateLiftAngleGraph(double velocity, double wingArea) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Lift Force");
@@ -133,13 +133,14 @@ public class AeroDashController {
         liftAngleGraph.getData().add(series);
     }
 
-
+    // Run simulation with input values
     private void startSimulation() {
         try {
             double velocity = Double.parseDouble(airSpeedTextField.getText());
             double wingArea = Double.parseDouble(wingAreaTextField.getText());
             double angle = Double.parseDouble(angleOfAttack.getText());
 
+            // input validation
             if (velocity <= 0 || wingArea <= 0) {
                 showError("Velocity and wing area must be positive values");
                 return;
@@ -150,6 +151,7 @@ public class AeroDashController {
                 return;
             } else showError("");
 
+            // calculate forces
             double lift = calculateLift(velocity, wingArea, angle);
             double drag = calculateDrag(velocity, wingArea);
 
@@ -167,21 +169,25 @@ public class AeroDashController {
         }
     }
 
+    // Lift calculation
     private double calculateLift(double velocity, double wingArea, double angleOfAttack) {
         double alpha = Math.toRadians(angleOfAttack);
         double cl = CL * Math.sin(2 * alpha);
         return 0.5 * AIR_DENSITY * velocity * velocity * wingArea * cl;
     }
 
+    // Drag calculation
     private double calculateDrag(double velocity, double wingArea) {
         return 0.5 * AIR_DENSITY * velocity * velocity * wingArea * CD;
     }
 
+    // Show error message
     private void showError(String msg) {
         errorLabel.setText(msg);
         errorLabel.setStyle("-fx-text-fill: red;");
     }
 
+    // Restore previous data
     public void restoreData(double velocity, double wingArea, double angle) {
         airSpeedTextField.setText(String.valueOf(velocity));
         wingAreaTextField.setText(String.valueOf(wingArea));
@@ -198,6 +204,7 @@ public class AeroDashController {
         updateLiftAngleGraph(velocity, wingArea);
     }
 
+    // Reset inputs and labels
     private void resetFields() {
         airSpeedTextField.clear();
         wingAreaTextField.clear();
@@ -210,6 +217,7 @@ public class AeroDashController {
         initializeGraphs();
     }
 
+    // Load rocket path view
     private void viewPath() {
         try {
             if (dashMedia != null) dashMedia.stop();
@@ -244,6 +252,7 @@ public class AeroDashController {
         }
     }
 
+    // Play dashboard music
     private void playDashMusic() {
         try {
             Media dashSong = new Media(getClass().getResource("/Sound/dashboardsong.mp3").toExternalForm());
