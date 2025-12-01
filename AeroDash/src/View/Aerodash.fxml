@@ -84,7 +84,7 @@
     <!-- CENTER: FLOATING SPACE IMAGE -->
     <center>
         <ImageView fx:id="spaceImage"
-                   fitWidth="300"
+                   fitWidth="250"
                    preserveRatio="true"
                    pickOnBounds="true">
             <image>
